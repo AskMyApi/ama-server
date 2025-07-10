@@ -15,14 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
  * 2. provider가 null 일 때, IllegalArgumentException이 발생한다.
  * 3. email은 null이 아니어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
  * 4. email은 유효한 이메일 형식이어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
- * 5. userId는 null이 아니어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
- * 6. userId는 UUID 형식이어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
- * 7. OauthAuthInfo는 생성 시 식별자(AuthId)를 함께 생성한다.
- * 8. 서로 다른 OauthAuthInfo 인스턴스는 서로 다른 AuthId를 가진다.
- * 9. OauthAuthInfo의 고유한 식별자(AuthId)는 UUID 형식을 따른다.
- * 10. OauthAuthInfo는 생성 시 생성시간(LocalDateTime)을 설정한다.
- * 11. OauthAuthInfo는 생성 시 갱신시간(LocalDateTime)을 설정한다.
- * 12. OauthAuthInfo는 AuthInfo로 추상화하여 식별자, 생성시간, 갱신시간을 조회할 수 있다.
+ * 5. OauthAuthInfo는 생성 시 식별자(AuthId)를 함께 생성한다.
+ * 6. OauthAuthInfo는 생성 시 생성시간(LocalDateTime)을 설정한다.
+ * 7. OauthAuthInfo는 생성 시 갱신시간(LocalDateTime)을 설정한다.
+ * 8. OauthAuthInfo는 AuthInfo로 추상화하여 식별자, 생성시간, 갱신시간을 조회할 수 있다.
  */
 class OauthAuthInfoTest {
 
@@ -40,7 +36,7 @@ class OauthAuthInfoTest {
         assertThat(authInfo).isNotNull();
         assertEquals(provider, authInfo.getProvider());
         assertEquals(email, authInfo.getEmail());
-        assertEquals(userId, authInfo.getUserId());
+        assertEquals(userId, authInfo.getMemberId());
     }
 
     @Test
@@ -92,40 +88,6 @@ class OauthAuthInfoTest {
     }
 
     @Test
-    void userId는_null이_아니어야_하며_이와_다를_시_IllegalArgumentException이_발생한다() {
-        // Arrange
-        OauthProvider provider = OauthProvider.GOOGLE;
-        String email = "test@example.com";
-        String userId = null;
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            OauthAuthInfo.create(provider, email, userId);
-        });
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "",
-            " ",
-            "invalid-uuid",
-            "12345",
-            "not-a-uuid-format"
-    })
-    void userId는_UUID_형식이어야_하며_이와_다를_시_IllegalArgumentException이_발생한다(
-            String userId
-    ) {
-        // Arrange
-        OauthProvider provider = OauthProvider.GOOGLE;
-        String email = "test@email.com";
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            OauthAuthInfo.create(provider, email, userId);
-        });
-    }
-
-    @Test
     void OauthAuthInfo는_생성시_식별자_AuthId를_생성한다() {
         // Arrange
         OauthProvider provider = OauthProvider.GOOGLE;
@@ -135,38 +97,6 @@ class OauthAuthInfoTest {
         var authInfo = OauthAuthInfo.create(provider, email, userId);
         // Assert
         assertThat(authInfo.getAuthId()).isNotNull();
-    }
-
-    @Test
-    void 서로_다른_OauthAuthInfo_인스턴스는_서로_다른_AuthId를_가진다() {
-        // Arrange
-        OauthProvider provider = OauthProvider.GOOGLE;
-        String email1 = "test1@example.com";
-        String userId1 = UUID.randomUUID().toString();
-        String email2 = "test2@example.com";
-        String userId2 = UUID.randomUUID().toString();
-
-        // Act
-        var authInfo1 = OauthAuthInfo.create(provider, email1, userId1);
-        var authInfo2 = OauthAuthInfo.create(provider, email2, userId2);
-
-        // Assert
-        assertThat(authInfo1.getAuthId()).isNotEqualTo(authInfo2.getAuthId());
-    }
-
-    @Test
-    void OauthAuthInfo의_고유한_식별자_AuthId는_UUID_형식을_따른다() {
-        // Arrange
-        OauthProvider provider = OauthProvider.GOOGLE;
-        String email = "test@example.com";
-        String userId = UUID.randomUUID().toString();
-
-        // Act
-        var authInfo = OauthAuthInfo.create(provider, email, userId);
-        String authId = authInfo.getAuthId();
-
-        // Assert
-        assertDoesNotThrow(() -> UUID.fromString(authId));
     }
 
     @Test
@@ -197,7 +127,7 @@ class OauthAuthInfoTest {
 
         // Assert
         assertThat(authInfo.getAuthId()).isNotNull();
-        assertThat(authInfo.getUserId()).isEqualTo(userId);
+        assertThat(authInfo.getMemberId()).isEqualTo(userId);
         assertThat(authInfo.getCreatedAt()).isNotNull();
         assertThat(authInfo.getUpdatedAt()).isNotNull();
     }

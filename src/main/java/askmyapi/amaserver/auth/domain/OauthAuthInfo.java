@@ -7,18 +7,18 @@ public class OauthAuthInfo extends AuthInfo {
     private OauthProvider provider;
     private String email;
 
-    private OauthAuthInfo(OauthProvider provider, String email, String userId) {
-        super(userId);
+    private OauthAuthInfo(OauthProvider provider, String email, String memberId) {
+        super(memberId);
         this.provider = provider;
         this.email = email;
     }
 
-    public static OauthAuthInfo create(OauthProvider provider, String email, String userId) {
-        validateParams(provider, email, userId);
-        return new OauthAuthInfo(provider, email, userId);
+    public static OauthAuthInfo create(OauthProvider provider, String email, String memberId) {
+        validateParams(provider, email);
+        return new OauthAuthInfo(provider, email, memberId);
     }
 
-    private static void validateParams(OauthProvider provider, String email, String userId) {
+    private static void validateParams(OauthProvider provider, String email) {
         validateProvider(provider);
         validateEmail(email);
     }

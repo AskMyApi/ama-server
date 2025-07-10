@@ -1,2 +1,4 @@
-package askmyapi.amaserver.auth.application;public class AuthService {
+package askmyapi.amaserver.auth.application;
+
+public class AuthService {
 }
