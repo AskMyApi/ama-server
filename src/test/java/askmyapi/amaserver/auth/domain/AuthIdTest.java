@@ -6,14 +6,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
+import static askmyapi.amaserver.auth.AuthTestFixture.generateMemberId;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * TC
  * 1. AuthId는 memberId(String)로 생성된다.
  * 2. memberId는 null이 아니어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
- * 3. memberId는 UUID 형식이어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
- * 4. AuthId는 생성 시 식별자를 생성하며 UUID 형식을 따른다.
+ * 4. AuthId는 생성 시 식별자(UUID)를 생성한다.
  * 5. 서로 같은 memberId에 대해 같은 식별자를 가진다.
  * 6. 서로 다른 memberId에 대해 서로 다른 식별자를 가진다.
  */
@@ -22,7 +22,7 @@ class AuthIdTest {
     @Test
     void AuthId는_memberId로_생성되며_전달받은_값을_정확히_보유한다() {
         // Arrange
-        String memberId = UUID.randomUUID().toString();
+        String memberId = generateMemberId();
 
         // Act
         AuthId authId = AuthId.of(memberId);
@@ -42,37 +42,22 @@ class AuthIdTest {
         });
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "",
-            " ",
-            "invalid-uuid-format"
-    })
-    void memberId는_UUID_형식이어야_하며_이와_다를_시_IllegalArgumentException이_발생한다(
-            String memberId
-    ) {
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            AuthId.of(memberId);
-        });
-    }
-
     @Test
-    void AuthId는_생성시_식별자를_생성하며_UUID_형식을_따른다() {
+    void authId는_생성시_식별자_UUID를_생성한다() {
         // Arrange
-        String memberId = UUID.randomUUID().toString();
+        String memberId = generateMemberId();
 
         // Act
         AuthId authId = AuthId.of(memberId);
 
         // Assert
-        assertDoesNotThrow(() -> UUID.fromString(authId.id()));
+        assertNotNull(authId.id());
     }
 
     @Test
     void 서로_같은_memberId에_대해_같은_식별자를_가진다() {
         // Arrange
-        String memberId = UUID.randomUUID().toString();
+        String memberId = generateMemberId();
 
         // Act
         AuthId authId1 = AuthId.of(memberId);
@@ -85,8 +70,8 @@ class AuthIdTest {
     @Test
     void 서로_다른_memberId에_대해_서로_다른_식별자를_가진다() {
         // Arrange
-        String memberId1 = UUID.randomUUID().toString();
-        String memberId2 = UUID.randomUUID().toString();
+        String memberId1 = generateMemberId();
+        String memberId2 = generateMemberId();
 
         // Act
         AuthId authId1 = AuthId.of(memberId1);

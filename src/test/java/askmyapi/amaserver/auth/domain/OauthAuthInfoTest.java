@@ -6,12 +6,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
+import static askmyapi.amaserver.auth.AuthTestFixture.generateEmail;
+import static askmyapi.amaserver.auth.AuthTestFixture.generateMemberId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * TC
- * 1. OauthAuthInfo는 provider(OauthProvider), email(String), userId(String)로 생성되며, 전달받은 값을 정확히 보유한다.
+ * 1. OauthAuthInfo는 provider(OauthProvider), email(String), memberId(String)로 생성되며, 전달받은 값을 정확히 보유한다.
  * 2. provider가 null 일 때, IllegalArgumentException이 발생한다.
  * 3. email은 null이 아니어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
  * 4. email은 유효한 이메일 형식이어야 하며, 이와 다를 시 IllegalArgumentException이 발생한다.
@@ -23,32 +25,32 @@ import static org.junit.jupiter.api.Assertions.*;
 class OauthAuthInfoTest {
 
     @Test
-    void OauthAuthInfo는_provider_email_userId로_생성되며_전달받은_값을_정확히_보유한다() {
+    void OauthAuthInfo는_provider_email_memberId로_생성되며_전달받은_값을_정확히_보유한다() {
         // Arrange
         OauthProvider provider = OauthProvider.GOOGLE;
-        String email = "test@example.com";
-        String userId = UUID.randomUUID().toString();
+        String email = generateEmail();
+        String memberId = generateMemberId();
 
         // Act
-        var authInfo = OauthAuthInfo.create(provider, email, userId);
+        var authInfo = OauthAuthInfo.create(provider, email, memberId);
 
         // Assert
         assertThat(authInfo).isNotNull();
         assertEquals(provider, authInfo.getProvider());
         assertEquals(email, authInfo.getEmail());
-        assertEquals(userId, authInfo.getMemberId());
+        assertEquals(memberId, authInfo.getMemberId());
     }
 
     @Test
     void provider가_null일_때_IllegalArgumentException이_발생한다() {
         // Arrange
         OauthProvider provider = null;
-        String email = "test@example.com";
-        String userId = UUID.randomUUID().toString();
+        String email = generateEmail();
+        String memberId = generateMemberId();
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            OauthAuthInfo.create(provider, email, userId);
+            OauthAuthInfo.create(provider, email, memberId);
         });
     }
 
@@ -56,12 +58,12 @@ class OauthAuthInfoTest {
     void email은_null이_아니어야_하며_이와_다를_시_IllegalArgumentException이_발생한다() {
         // Arrange
         OauthProvider provider = OauthProvider.GOOGLE;
-        String userId = UUID.randomUUID().toString();
+        String memberId = generateMemberId();
         String email = null;
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            OauthAuthInfo.create(provider, email, userId);
+            OauthAuthInfo.create(provider, email, memberId);
         });
     }
 
@@ -79,11 +81,11 @@ class OauthAuthInfoTest {
     ) {
         // Arrange
         OauthProvider provider = OauthProvider.GOOGLE;
-        String userId = UUID.randomUUID().toString();
+        String memberId = generateMemberId();
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            OauthAuthInfo.create(provider, email, userId);
+            OauthAuthInfo.create(provider, email, memberId);
         });
     }
 
@@ -91,10 +93,10 @@ class OauthAuthInfoTest {
     void OauthAuthInfo는_생성시_식별자_AuthId를_생성한다() {
         // Arrange
         OauthProvider provider = OauthProvider.GOOGLE;
-        String email = "test@example.com";
-        String userId = UUID.randomUUID().toString();
+        String email = generateEmail();
+        String memberId = generateMemberId();
         // Act
-        var authInfo = OauthAuthInfo.create(provider, email, userId);
+        var authInfo = OauthAuthInfo.create(provider, email, memberId);
         // Assert
         assertThat(authInfo.getAuthId()).isNotNull();
     }
@@ -103,11 +105,11 @@ class OauthAuthInfoTest {
     void OauthAuthInfo는_생성시_생성시간과_갱신시간을_설정한다() {
         // Arrange
         OauthProvider provider = OauthProvider.GOOGLE;
-        String email = "test@example.com";
-        String userId = UUID.randomUUID().toString();
+        String email = generateEmail();
+        String memberId = generateMemberId();
 
         // Act
-        var authInfo = OauthAuthInfo.create(provider, email, userId);
+        var authInfo = OauthAuthInfo.create(provider, email, memberId);
 
         // Assert
         assertThat(authInfo.getCreatedAt()).isNotNull();
@@ -119,15 +121,15 @@ class OauthAuthInfoTest {
     void OauthAuthInfo는_AuthInfo로_추상화하여_식별자_생성시간_갱신시간을_조회할_수_있다() {
         // Arrange
         OauthProvider provider = OauthProvider.GOOGLE;
-        String email = "test@example.com";
-        String userId = UUID.randomUUID().toString();
+        String email = generateEmail();
+        String memberId = generateMemberId();
 
         // Act
-        AuthInfo authInfo = OauthAuthInfo.create(provider, email, userId);
+        AuthInfo authInfo = OauthAuthInfo.create(provider, email, memberId);
 
         // Assert
         assertThat(authInfo.getAuthId()).isNotNull();
-        assertThat(authInfo.getMemberId()).isEqualTo(userId);
+        assertThat(authInfo.getMemberId()).isEqualTo(memberId);
         assertThat(authInfo.getCreatedAt()).isNotNull();
         assertThat(authInfo.getUpdatedAt()).isNotNull();
     }
