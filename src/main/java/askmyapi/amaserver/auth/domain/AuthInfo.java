@@ -1,23 +1,20 @@
 package askmyapi.amaserver.auth.domain;
 
+import askmyapi.amaserver.auth.domain.vo.AuthId;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 public abstract class AuthInfo {
     private AuthId authId;
     private String memberId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     protected AuthInfo(String memberId){
-        LocalDateTime now = LocalDateTime.now();
-
-        this.authId = AuthId.of(memberId);
+        this.authId = AuthId.create();
         this.memberId = memberId;
-        this.createdAt = now;
-        this.updatedAt = now;
+    }
+
+    protected AuthInfo(AuthId authId, String memberId) {
+        this.authId = authId;
+        this.memberId = memberId;
     }
 }

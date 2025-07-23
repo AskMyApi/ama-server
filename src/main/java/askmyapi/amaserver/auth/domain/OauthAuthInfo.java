@@ -1,40 +1,29 @@
 package askmyapi.amaserver.auth.domain;
 
+import askmyapi.amaserver.auth.domain.vo.AuthId;
+import askmyapi.amaserver.auth.domain.vo.OauthAuthenticate;
 import lombok.Getter;
 
 @Getter
 public class OauthAuthInfo extends AuthInfo {
-    private OauthProvider provider;
-    private String email;
+    private OauthAuthenticate oauthAuthenticate;
 
-    private OauthAuthInfo(OauthProvider provider, String email, String memberId) {
+    private OauthAuthInfo(OauthAuthenticate oauthAuthenticate, String memberId) {
         super(memberId);
-        this.provider = provider;
-        this.email = email;
+
+        this.oauthAuthenticate = oauthAuthenticate;
     }
 
-    public static OauthAuthInfo create(OauthProvider provider, String email, String memberId) {
-        validateParams(provider, email);
-        return new OauthAuthInfo(provider, email, memberId);
+    private OauthAuthInfo(AuthId id, OauthAuthenticate oauthAuthenticate, String memberId) {
+        super(id, memberId);
+        this.oauthAuthenticate = oauthAuthenticate;
     }
 
-    private static void validateParams(OauthProvider provider, String email) {
-        validateProvider(provider);
-        validateEmail(email);
+    public static OauthAuthInfo create(OauthAuthenticate oauthAuthenticate, String memberId) {
+        return new OauthAuthInfo(oauthAuthenticate, memberId);
     }
 
-    private static void validateEmail(String email) {
-        if (email == null) {
-            throw new IllegalArgumentException("이메일 정보가 없습니다.");
-        }
-        if (!email.matches("^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
-            throw new IllegalArgumentException("유효하지 않은 이메일 형식입니다.");
-        }
-    }
-
-    private static void validateProvider(OauthProvider provider) {
-        if (provider == null) {
-            throw new IllegalArgumentException("인증 제공자 정보가 없습니다.");
-        }
+    public static OauthAuthInfo createWithId(AuthId id, OauthAuthenticate oauthAuthenticate, String memberId) {
+        return new OauthAuthInfo(id, oauthAuthenticate, memberId);
     }
 }

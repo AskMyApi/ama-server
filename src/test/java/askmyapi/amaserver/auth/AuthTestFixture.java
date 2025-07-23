@@ -5,18 +5,30 @@ import java.util.UUID;
 public class AuthTestFixture {
 
     public static String generateEmail() {
-        return UUID.randomUUID() + "@example.com";
-    }
-
-    public static String generateMemberId() {
-        return UUID.randomUUID().toString();
+        return "test" + UUID.randomUUID() + "@example.com";
     }
 
     public static String generateUsername() {
         return UUID.randomUUID().toString();
     }
 
+    public static String generateMemberId() {
+        return UUID.randomUUID().toString();
+    }
+
     public static String generateProfileImgUrl() {
-        return "https://example.com/profile/" + UUID.randomUUID();
+        return "https://example.com/profile/" + UUID.randomUUID() + ".jpg";
+    }
+
+    public static String generateProvider() {
+        return generateGoogleProvider();
+    }
+
+    public static String generateGoogleProvider() {
+        return "google";
+    }
+
+    public static String generateGithubProvider() {
+        return "github";
     }
 }
