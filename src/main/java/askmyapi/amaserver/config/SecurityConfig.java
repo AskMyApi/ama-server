@@ -1,6 +1,7 @@
 package askmyapi.amaserver.config;
 
 import askmyapi.amaserver.auth.adapter.in.oauth2.Oauth2Adapter;
+import askmyapi.amaserver.auth.adapter.in.security.AuthenticateSuccessAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.web.cors.CorsUtils;
 public class SecurityConfig {
     private final Oauth2Adapter oauth2Adapter;
     private final CustomCorsConfigurationSource customCorsConfigurationSource;
+    private final AuthenticateSuccessAdapter authenticateSuccessAdapter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,11 +32,22 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/api/v1/auth/**",
+                                "/oauth2/**",
+                                "/api/v1/auth/refresh"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
 
                 // OAuth 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(endpointConfig -> endpointConfig.userService(oauth2Adapter))
+                        .successHandler(authenticateSuccessAdapter)
                 );
 
         return http.build();

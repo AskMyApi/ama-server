@@ -13,6 +13,7 @@ import java.util.UUID;
 @SuperBuilder
 @DiscriminatorColumn
 @Getter
+@Table(name = "auth_info")
 public abstract class AuthInfoJpaEntity {
     @Id
     private UUID id;

@@ -23,7 +23,7 @@ public class Oauth2Adapter implements OAuth2UserService<OAuth2UserRequest, OAuth
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        var command = securityMapper.oauth2UserToCommand(oAuth2User);
+        var command = securityMapper.oauth2UserToCommand(userRequest.getClientRegistration(), oAuth2User);
         var result = loadOrCreateOauthUseCase.loadOrCreate(command);
 
         // Security context에 저장할 객체 생성

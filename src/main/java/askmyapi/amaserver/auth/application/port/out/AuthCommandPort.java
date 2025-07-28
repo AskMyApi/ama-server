@@ -5,4 +5,6 @@ import askmyapi.amaserver.auth.domain.OauthAuthInfo;
 public interface AuthCommandPort {
 
     OauthAuthInfo createOauthAuthInfo(OauthAuthInfo oauthAuthInfo);
+
+    void saveToken(SaveRefreshTokenCommand command);
 }

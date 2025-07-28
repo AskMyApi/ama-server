@@ -5,13 +5,13 @@ import java.util.Map;
 public class GitHubUserParseStrategy implements Oauth2UserParseStrategy {
 
     @Override
-    public String getEmail(Map<String, Object> attributes) {
-        return (String) attributes.get("email");
+    public String getSocialId(Map<String, Object> attributes) {
+        return (String) attributes.get("id").toString();
     }
 
     @Override
     public String getUsername(Map<String, Object> attributes) {
-        return (String) attributes.get("name"); // 또는 login
+        return (String) attributes.get("login");
     }
 
     @Override

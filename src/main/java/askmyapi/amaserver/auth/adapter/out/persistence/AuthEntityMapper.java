@@ -14,7 +14,7 @@ public class AuthEntityMapper {
                 AuthId.from(entity.getId()),
                 OauthAuthenticate.from(
                         entity.getProvider(),
-                        entity.getEmail()
+                        entity.getSocialId()
                 ),
                 entity.getMemberId());
     }
@@ -24,7 +24,7 @@ public class AuthEntityMapper {
                 .id(domain.getAuthId().getValue())
                 .memberId(domain.getMemberId())
                 .provider(domain.getOauthAuthenticate().getProvider())
-                .email(domain.getOauthAuthenticate().getEmail())
+                .socialId(domain.getOauthAuthenticate().getSocialId())
                 .build();
     }
 }

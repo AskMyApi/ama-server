@@ -6,8 +6,8 @@ import java.util.Map;
 public class GoogleUserParseStrategy implements Oauth2UserParseStrategy {
 
     @Override
-    public String getEmail(Map<String, Object> attributes) {
-        return (String) attributes.get("email");
+    public String getSocialId(Map<String, Object> attributes) {
+        return (String) attributes.get("sub").toString();
     }
 
     @Override

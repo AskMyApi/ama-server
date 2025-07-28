@@ -4,61 +4,61 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static askmyapi.amaserver.auth.AuthTestFixture.generateEmail;
+import static askmyapi.amaserver.auth.AuthTestFixture.generateSocialId;
 import static askmyapi.amaserver.auth.AuthTestFixture.generateProvider;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * TC
- * provider와 email로 생성된다
+ * provider와 socialId로 생성된다
  * provider가 google, github이면 정상적으로 생성된다
  * provider가 google, github가 아니면 IllegalArgumentException을 던진다
  */
 class OauthAuthenticateTest {
 
     @Test
-    void OauthAuthenticate는_OauthProvider와_email로_생성된다() {
+    void OauthAuthenticate는_OauthProvider와_socialId로_생성된다() {
         // given
         var provider = generateProvider();
-        var email = generateEmail();
+        var socialId = generateSocialId();
 
         // when
-        OauthAuthenticate oauthAuthenticate = OauthAuthenticate.create(provider, email);
+        OauthAuthenticate oauthAuthenticate = OauthAuthenticate.create(provider, socialId);
 
         // then
         assertNotNull(oauthAuthenticate);
         assertNotNull(oauthAuthenticate.getProvider());
-        assertEquals(email, oauthAuthenticate.getEmail());
+        assertEquals(socialId, oauthAuthenticate.getSocialId());
     }
 
     @Test
     void OauthAuthenticate는_OauthProvider가_google이면_정상적으로_생성된다() {
         // given
         String provider = "google";
-        var email = generateEmail();
+        var socialId = generateSocialId();
 
         // when
-        OauthAuthenticate oauthAuthenticate = OauthAuthenticate.create(provider, email);
+        OauthAuthenticate oauthAuthenticate = OauthAuthenticate.create(provider, socialId);
 
         // then
         assertNotNull(oauthAuthenticate);
         assertEquals(OauthAuthenticate.OauthProvider.GOOGLE, oauthAuthenticate.getProvider());
-        assertEquals(email, oauthAuthenticate.getEmail());
+        assertEquals(socialId, oauthAuthenticate.getSocialId());
     }
 
     @Test
     void OauthAuthenticate는_OauthProvider가_github이면_정상적으로_생성된다() {
         // given
         String provider = "github";
-        var email = generateEmail();
+        var socialId = generateSocialId();
 
         // when
-        OauthAuthenticate oauthAuthenticate = OauthAuthenticate.create(provider, email);
+        OauthAuthenticate oauthAuthenticate = OauthAuthenticate.create(provider, socialId);
 
         // then
         assertNotNull(oauthAuthenticate);
         assertEquals(OauthAuthenticate.OauthProvider.GITHUB, oauthAuthenticate.getProvider());
-        assertEquals(email, oauthAuthenticate.getEmail());
+        assertEquals(socialId, oauthAuthenticate.getSocialId());
     }
 
     @ParameterizedTest
@@ -67,11 +67,11 @@ class OauthAuthenticateTest {
             String invalidProvider
     ) {
         // given
-        var email = generateEmail();
+        var socialId = generateSocialId();
 
         // when & then
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            OauthAuthenticate.create(invalidProvider, email);
+            OauthAuthenticate.create(invalidProvider, socialId);
         });
 
         assertEquals("Invalid OauthProvider", exception.getMessage());

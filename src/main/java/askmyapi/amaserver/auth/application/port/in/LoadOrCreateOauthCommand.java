@@ -7,14 +7,14 @@ import java.net.MalformedURLException;
 
 public record LoadOrCreateOauthCommand(
         String provider,
-        String email,
+        String socialId,
         String username,
         String profileImageUrl
 ) {
 
     public LoadOrCreateOauthCommand {
         validateProvider(provider);
-        validateEmail(email);
+        validateSocialId(socialId);
         validateUsername(username);
         validateProfileImageUrl(profileImageUrl);
         OauthAuthenticate.OauthProvider.fromValueIgnoreCase(provider);
@@ -26,9 +26,9 @@ public record LoadOrCreateOauthCommand(
         }
     }
 
-    private void validateEmail(String email) {
-        if (email == null || !email.matches("^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,}$")) {
-            throw new IllegalArgumentException("Invalid Email");
+    private void validateSocialId(String socialId) {
+        if (socialId == null || socialId.isBlank()) {
+            throw new IllegalArgumentException("Invalid Social ID");
         }
     }
 

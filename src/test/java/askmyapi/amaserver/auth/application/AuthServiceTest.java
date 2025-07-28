@@ -1,6 +1,8 @@
 package askmyapi.amaserver.auth.application;
 
+import askmyapi.amaserver.auth.JwtAssertions;
 import askmyapi.amaserver.auth.application.port.in.AuthResult;
+import askmyapi.amaserver.auth.application.port.in.IssueTokenCommand;
 import askmyapi.amaserver.auth.application.port.in.LoadOrCreateOauthCommand;
 import askmyapi.amaserver.auth.application.port.out.*;
 import askmyapi.amaserver.auth.domain.OauthAuthInfo;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Optional;
 
@@ -23,8 +26,8 @@ import static org.mockito.Mockito.*;
  * TC
  * loadOrCreate
  * 1. 유효한 요청에 대해 AuthResult.Load를 반환한다.
- * 2. 존재하는 provider와 email이면 조회된 정보를 반환한다.
- * 3. 존재하지 않는 provider와 email이면 회원서비스로 생성 요청을 하고 회원 정보를 저장한 뒤 반환한다.
+ * 2. 존재하는 provider와 socialId이면 조회된 정보를 반환한다.
+ * 3. 존재하지 않는 provider와 socialId이면 회원서비스로 생성 요청을 하고 회원 정보를 저장한 뒤 반환한다.
  */
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -38,16 +41,18 @@ class AuthServiceTest {
     @Mock
     private AuthQueryPort authQueryPort;
 
+
+
     @Test
     void loadOrCreate_유효한_요청에_대해_AuthResult_Load를_반환한다() {
         // given
         var provider = generateProvider();
-        var email = generateEmail();
+        var socialId = generateSocialId();
         var username = generateUsername();
         var profileImageUrl = generateProfileImgUrl();
         var command = new LoadOrCreateOauthCommand(
                 provider,
-                email,
+                socialId,
                 username,
                 profileImageUrl
         );
@@ -62,11 +67,11 @@ class AuthServiceTest {
     }
 
     @Test
-    void loadOrCreate_존재하는_provider와_email이면_조회된_정보를_반환한다() {
+    void loadOrCreate_존재하는_provider와_socialId이면_조회된_정보를_반환한다() {
         // given
         var provider = generateProvider();
-        var email = generateEmail();
-        var command = new LoadOrCreateOauthCommand(provider, email, generateUsername(), generateProfileImgUrl());
+        var socialId = generateSocialId();
+        var command = new LoadOrCreateOauthCommand(provider, socialId, generateUsername(), generateProfileImgUrl());
         var authInfo = Instancio.of(OauthAuthInfo.class)
                 .set(field(OauthAuthInfo::getAuthId), AuthId.create())
                 .set(field(OauthAuthInfo::getMemberId), generateMemberId())
@@ -89,11 +94,11 @@ class AuthServiceTest {
     }
 
     @Test
-    void loadOrCreate_존재하지_않는_provider와_email이면_회원서비스로_생성_요청을_하고_회원_정보를_저장한_뒤_반환한다() {
+    void loadOrCreate_존재하지_않는_provider와_socialId이면_회원서비스로_생성_요청을_하고_회원_정보를_저장한_뒤_반환한다() {
         // given
         var provider = generateProvider();
-        var email = generateEmail();
-        var command = new LoadOrCreateOauthCommand(provider, email, generateUsername(), generateProfileImgUrl());
+        var socialId = generateSocialId();
+        var command = new LoadOrCreateOauthCommand(provider, socialId, generateUsername(), generateProfileImgUrl());
         var createMemberResult = Instancio.of(CreateMemberResult.class).create();
         var authInfo = Instancio.of(OauthAuthInfo.class).create();
 
@@ -112,11 +117,11 @@ class AuthServiceTest {
     }
 
     @Test
-    void loadOrCreate_같은_provider와_email을_가진_유저의_AuthResult_Load는_동일하다() {
+    void loadOrCreate_같은_provider와_socialId을_가진_유저의_AuthResult_Load는_동일하다() {
         // given
         var provider = generateProvider();
-        var email = generateEmail();
-        var command = new LoadOrCreateOauthCommand(provider, email, generateUsername(), generateProfileImgUrl());
+        var socialId = generateSocialId();
+        var command = new LoadOrCreateOauthCommand(provider, socialId, generateUsername(), generateProfileImgUrl());
         var authInfo = Instancio.of(OauthAuthInfo.class).create();
 
         when(authQueryPort.findOauthAuthInfo(any())).thenReturn(Optional.of(authInfo));
@@ -129,4 +134,5 @@ class AuthServiceTest {
         assertEquals(result1.id(), result2.id());
         assertEquals(result1.memberId(), result2.memberId());
     }
+
 }

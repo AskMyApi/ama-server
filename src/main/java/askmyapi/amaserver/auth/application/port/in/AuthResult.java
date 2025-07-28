@@ -7,6 +7,12 @@ public record AuthResult() {
     public record Load(
             UUID id,
             String memberId
-    ) {
-    }
+    ) {}
+
+    public record IssueToken(
+            String accessToken,
+            Long accessTokenExpiresIn,
+            String refreshToken,
+            Long refreshTokenExpiresIn
+    ) {}
 }

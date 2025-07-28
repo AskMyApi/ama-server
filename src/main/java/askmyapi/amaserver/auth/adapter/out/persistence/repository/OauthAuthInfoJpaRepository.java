@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface OauthAuthInfoJpaRepository extends JpaRepository<OauthAuthInfoJpaEntity, String> {
 
-    Optional<OauthAuthInfoJpaEntity> findByProviderAndEmail(OauthAuthenticate.OauthProvider provider, String email);
+    Optional<OauthAuthInfoJpaEntity> findByProviderAndSocialId(OauthAuthenticate.OauthProvider provider, String socialId);
 }

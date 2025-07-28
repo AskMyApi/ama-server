@@ -15,7 +15,7 @@ class OauthAuthInfoTest {
     @Test
     void OauthAuthenticate와_memberId로_생성된다() {
         // given
-        var provider = OauthAuthenticate.create(generateProvider(), generateEmail());
+        var provider = OauthAuthenticate.create(generateProvider(), generateSocialId());
         var memberId = generateMemberId();
 
         // when
