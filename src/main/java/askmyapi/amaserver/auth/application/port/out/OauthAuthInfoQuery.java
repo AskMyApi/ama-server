@@ -4,6 +4,6 @@ import askmyapi.amaserver.auth.domain.vo.OauthAuthenticate;
 
 public record OauthAuthInfoQuery(
         OauthAuthenticate.OauthProvider provider,
-        String email
+        String socialId
 ) {
 }

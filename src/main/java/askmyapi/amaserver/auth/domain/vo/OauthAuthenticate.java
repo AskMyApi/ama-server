@@ -26,18 +26,18 @@ public class OauthAuthenticate {
     }
 
     private final OauthProvider provider;
-    private final String email;
+    private final String socialId;
 
-    private OauthAuthenticate(OauthProvider provider, String email) {
+    private OauthAuthenticate(OauthProvider provider, String socialId) {
         this.provider = provider;
-        this.email = email;
+        this.socialId = socialId;
     }
 
-    public static OauthAuthenticate create(String provider, String email) {
-        return new OauthAuthenticate(OauthProvider.fromValueIgnoreCase(provider), email);
+    public static OauthAuthenticate create(String provider, String socialId) {
+        return new OauthAuthenticate(OauthProvider.fromValueIgnoreCase(provider), socialId);
     }
 
-    public static OauthAuthenticate from(OauthProvider provider, String email) {
-        return new OauthAuthenticate(provider, email);
+    public static OauthAuthenticate from(OauthProvider provider, String socialId) {
+        return new OauthAuthenticate(provider, socialId);
     }
 }

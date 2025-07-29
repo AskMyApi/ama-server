@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7.0.11
+    container_name: redis-dev
+    ports:
+      - "6379:6379"
+    networks:
+      - ama-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot-dev
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.dev
+    depends_on:
+      - redis
+    restart: always
+    networks:
+      - ama-net
+
+networks:
+  ama-net:
+    driver: bridge

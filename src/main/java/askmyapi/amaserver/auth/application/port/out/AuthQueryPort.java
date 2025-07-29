@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface AuthQueryPort {
 
     Optional<OauthAuthInfo> findOauthAuthInfo(OauthAuthInfoQuery query);
+
+    Optional<String> findRefreshToken(FindRefreshTokenQuery findRefreshTokenQuery);
 }

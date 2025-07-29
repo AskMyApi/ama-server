@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public class AuthTestFixture {
 
-    public static String generateEmail() {
-        return "test" + UUID.randomUUID() + "@example.com";
+    public static String generateSocialId() {
+        return "test" + UUID.randomUUID();
     }
 
     public static String generateUsername() {
