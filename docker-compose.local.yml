@@ -37,6 +37,8 @@ services:
       - "8080:8080"
     env_file:
       - .env.local
+    environment:
+      - BASE_URL=${BASE_URL}
     networks:
       - ama-net
 
