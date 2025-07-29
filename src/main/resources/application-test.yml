@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: ${spring.datasource.url}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+  data:
+    redis:
+      host: ${spring.data.redis.host}
+      port: ${spring.data.redis.port}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show-sql: true
+        format_sql: true
+        use_sql_comments: true
+
+jwt:
+  secret: "test_jwt_secret_askmyapi_for_test_20240612_abcdefg"
+  access-token:
+    expiration: 1800 # 30 minutes
+  refresh-token:
+    expiration: 604800 # 7 days
+
+url:
+  base: http://localhost:8080
