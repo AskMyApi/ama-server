@@ -1,5 +1,6 @@
 package askmyapi.amaserver.auth.application;
 
+import askmyapi.amaserver.IntegrationTest;
 import askmyapi.amaserver.auth.application.port.in.AuthResult;
 import askmyapi.amaserver.auth.application.port.in.IssueTokenCommand;
 import askmyapi.amaserver.auth.application.port.in.LoadOrCreateOauthCommand;
@@ -37,10 +38,7 @@ import static org.mockito.Mockito.*;
  * 4. 저장된 refresh token과 요청한 refresh token이 같으면 새로운 access token과 refresh token을 발급한다.
  * 5. 새로운 refresh token을 저장한다.
  */
-@SpringBootTest
-@Testcontainers
-@ActiveProfiles("test")
-@Transactional
+@IntegrationTest
 public class AuthServiceIntegrationTest {
 
     @Autowired

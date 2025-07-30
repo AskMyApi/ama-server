@@ -21,6 +21,12 @@ public class Member extends AggregateRoot {
         this.profileImageUrl = profileImageUrl;
     }
 
+    private Member(MemberId memberId, String name, String profileImageUrl) {
+        this.memberId = memberId;
+        this.name = name;
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public static Member create(String name, String profileImageUrl) {
         if(profileImageUrl != null && !isValidUrl(profileImageUrl)) {
             throw new IllegalArgumentException("Invalid Profile Image URL");
@@ -33,5 +39,9 @@ public class Member extends AggregateRoot {
         ));
 
         return created;
+    }
+
+    public static Member createWithId(MemberId memberId, String name, String profileImageUrl) {
+        return new Member(memberId, name, profileImageUrl);
     }
 }
