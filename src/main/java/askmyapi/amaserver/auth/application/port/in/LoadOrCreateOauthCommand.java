@@ -5,6 +5,8 @@ import org.apache.commons.validator.routines.UrlValidator;
 
 import java.net.MalformedURLException;
 
+import static askmyapi.amaserver.util.UrlValidator.isValidUrl;
+
 public record LoadOrCreateOauthCommand(
         String provider,
         String socialId,
@@ -42,13 +44,6 @@ public record LoadOrCreateOauthCommand(
         if (profileImageUrl != null && !isValidUrl(profileImageUrl)) {
             throw new IllegalArgumentException("Invalid Profile Image URL");
         }
-    }
-
-    private boolean isValidUrl(String url) {
-        UrlValidator validator = new UrlValidator(
-                new String[] {"http", "https"} // 허용할 프로토콜\
-        );
-        return validator.isValid(url);
     }
 
 }
