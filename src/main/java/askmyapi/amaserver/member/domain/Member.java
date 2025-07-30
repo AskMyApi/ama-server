@@ -1,5 +1,7 @@
 package askmyapi.amaserver.member.domain;
 
+import askmyapi.amaserver.global.AggregateRoot;
+import askmyapi.amaserver.member.domain.event.CreateMemberEvent;
 import askmyapi.amaserver.member.domain.vo.MemberId;
 import lombok.Getter;
 
@@ -8,7 +10,7 @@ import java.util.UUID;
 import static askmyapi.amaserver.util.UrlValidator.isValidUrl;
 
 @Getter
-public class Member {
+public class Member extends AggregateRoot {
     private MemberId memberId;
     private String name;
     private String profileImageUrl;
@@ -23,6 +25,13 @@ public class Member {
         if(profileImageUrl != null && !isValidUrl(profileImageUrl)) {
             throw new IllegalArgumentException("Invalid Profile Image URL");
         }
-        return new Member(name, profileImageUrl);
+        var created = new Member(name, profileImageUrl);
+        created.registerEvent(new CreateMemberEvent(
+                created.getMemberId().getValue(),
+                created.getName(),
+                created.getProfileImageUrl()
+        ));
+
+        return created;
     }
 }

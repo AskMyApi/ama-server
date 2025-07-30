@@ -1,5 +1,6 @@
 package askmyapi.amaserver.member.domain;
 
+import askmyapi.amaserver.member.domain.event.CreateMemberEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -13,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * create
  * 1. name, profileImageUrl를 전달받아 생성되며 MemberId, name, profileImageUrl를 갖는다
  * 2. profileImageUrl이 null이 아니면서 url 형식이 아니면 IllegalArgumentException이 발생한다
- * 2. 생성되는 member는 서로 다른 memberId를 가진다
+ * 3. 생성되는 member는 서로 다른 memberId를 가진다
+ * 4. CreateMemberEvent를 등록한다
  */
 class MemberTest {
 
@@ -70,5 +72,21 @@ class MemberTest {
         assertNotNull(member1);
         assertNotNull(member2);
         assertNotEquals(member1.getMemberId(), member2.getMemberId(), "Member IDs should be different");
+    }
+
+    @Test
+    void create_CreateMemberEvent를_등록한다() {
+        // given
+        String name = generateName();
+        String profileImageUrl = generateProfileImageUrl();
+
+        // when
+        Member member = Member.create(name, profileImageUrl);
+
+        // then
+        assertNotNull(member);
+        var events = member.consumeDomainEvents();
+        assertEquals(1, events.size());
+        assertInstanceOf(CreateMemberEvent.class, events.get(0));
     }
 }

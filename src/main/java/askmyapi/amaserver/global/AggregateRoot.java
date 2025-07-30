@@ -1,6 +1,7 @@
 package askmyapi.amaserver.global;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public abstract class AggregateRoot {
      * Returns an unmodifiable list of domain events.
      */
     public List<DomainEvent> consumeDomainEvents() {
-        var events = Collections.unmodifiableList(domainEvents);
+        var events = List.copyOf(domainEvents);
         domainEvents.clear(); // Clear the events after consuming them
         return events;
     }
