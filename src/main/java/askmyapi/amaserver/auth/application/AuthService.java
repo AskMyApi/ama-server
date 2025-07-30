@@ -8,9 +8,11 @@ import askmyapi.amaserver.auth.domain.vo.OauthAuthenticate;
 import askmyapi.amaserver.auth.domain.vo.OauthAuthenticate.OauthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthService implements LoadOrCreateOauthUseCase, IssueTokenUseCase, RefreshTokenUseCase  {
 
     private final MemberCommandPort memberCommandPort;
