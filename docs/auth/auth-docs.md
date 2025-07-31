@@ -15,6 +15,7 @@ sequenceDiagram
     participant SpringSecurity as 스프링 시큐리티
     participant AuthService as 인증 서비스
     participant MemberService as 회원 서비스
+    participant Spring as 스프링컨텍스트 
 
     User->>Oauth2Provider: 인증 요청
     Oauth2Provider->>User: 인증 코드 발급
@@ -28,6 +29,7 @@ sequenceDiagram
     else 사용자 없음
         MemberService->>AuthService: 사용자 존재하지 않음
         AuthService->>MemberService: 사용자 생성 요청
+        MemberService ->> Spring : 사용자 생성 이벤트 발행
         MemberService->>AuthService: 생성된 사용자 정보 반환
         AuthService ->> AuthService: 사용자 정보 저장
     end
