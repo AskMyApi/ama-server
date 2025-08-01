@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Archive API", description = "아카이브 관련 API")
-@RequestMapping("/api/v1")
 public interface ArchiveSpecs {
 
     @Operation(
@@ -20,7 +19,7 @@ public interface ArchiveSpecs {
             description = "지정된 이름과 스펙 목록으로 아카이브를 생성합니다. 스펙 타입은 SWAGGER, REST_DOCS, GIT_BOOK 중 하나여야 합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "성공적으로 생성됨"),
+            @ApiResponse(responseCode = "204", description = "성공적으로 생성됨"),
             @ApiResponse(
                     responseCode = "400",
                     description = "잘못된 Argument",
@@ -81,9 +80,8 @@ public interface ArchiveSpecs {
                     )
             )
     })
-    @PostMapping("/archives")
     ResponseEntity<Void> createArchive(
-            @RequestBody CreateArchiveRequest request
+            CreateArchiveRequest request
     );
 
 
@@ -158,10 +156,9 @@ public interface ArchiveSpecs {
                     )
             )
     })
-    @PutMapping("/archives/{archive-id}")
     ResponseEntity<Void> updateArchive(
-            @PathVariable("archive-id") String archiveId,
-            @RequestBody UpdateArchiveRequest request
+            String archiveId,
+            UpdateArchiveRequest request
     );
 
 
@@ -231,9 +228,8 @@ public interface ArchiveSpecs {
                     )
             )
     })
-    @DeleteMapping("/archives/{archive-id}")
     ResponseEntity<Void> deleteArchive(
-            @PathVariable("archive-id") String archiveId
+            String archiveId
     );
 
     @Operation(
@@ -262,12 +258,9 @@ public interface ArchiveSpecs {
                     )
             )
     })
-    @GetMapping("/archives")
     ResponseEntity<Page<ReadArchiveResponse>> getArchives(
-            @Schema(description = "페이지 번호", example = "0")
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @Schema(description = "페이지 크기", example = "20")
-            @RequestParam(value = "size", defaultValue = "20") int size
+            @Schema(description = "페이지 번호", example = "0") int page,
+            @Schema(description = "페이지 크기", example = "20")int size
     );
 
     @Operation(
@@ -275,7 +268,7 @@ public interface ArchiveSpecs {
             description = "아카이브에 새로운 스펙을 추가합니다. 스펙 URL은 실제 존재하는 URL이어야 하며, 스펙 문서 타입은 SWAGGER, REST_DOCS, GIT_BOOK 중 하나여야 합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "성공적으로 추가됨"),
+            @ApiResponse(responseCode = "204", description = "성공적으로 추가됨"),
             @ApiResponse(
                     responseCode = "400",
                     description = "잘못된 Argument",
@@ -361,11 +354,9 @@ public interface ArchiveSpecs {
                     )
             )
     })
-    @PostMapping("/archives/{archive-id}/specs")
     ResponseEntity<Void> addSpecToArchive(
-            @Schema(description = "아카이브 ID(UUID)", example = "123e4567-e89b-12d3-a456-426614174000")
-            @PathVariable("archive-id") String archiveId,
-            @RequestBody AddSpecRequest request);
+            @Schema(description = "아카이브 ID(UUID)", example = "123e4567-e89b-12d3-a456-426614174000") String archiveId,
+            AddSpecRequest request);
 
     @Operation(
             summary = "스펙 삭제",
@@ -444,11 +435,10 @@ public interface ArchiveSpecs {
                     )
             )
     })
-    @DeleteMapping("/archives/{archive-id}/specs/{spec-id}")
     ResponseEntity<Void> deleteSpecFromArchive(
             @Schema(description = "아카이브 ID(UUID)", example = "123e4567-e89b-12d3-a456-426614174000")
-            @PathVariable("archive-id") String archiveId,
+            String archiveId,
             @Schema(description = "스펙 ID(UUID)", example = "123e4567-e89b-12d3-a456-426614174001")
-            @PathVariable("spec-id") String specId
+            String specId
     );
 }
