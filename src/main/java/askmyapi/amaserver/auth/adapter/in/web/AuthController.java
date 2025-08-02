@@ -2,6 +2,7 @@ package askmyapi.amaserver.auth.adapter.in.web;
 
 import askmyapi.amaserver.auth.application.port.in.RefreshTokenCommand;
 import askmyapi.amaserver.auth.application.port.in.RefreshTokenUseCase;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

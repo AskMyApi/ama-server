@@ -2,6 +2,7 @@ package askmyapi.amaserver.config;
 
 import askmyapi.amaserver.auth.adapter.in.oauth2.Oauth2Adapter;
 import askmyapi.amaserver.auth.adapter.in.security.AuthenticateSuccessAdapter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,11 +44,15 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-
                 // OAuth 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(endpointConfig -> endpointConfig.userService(oauth2Adapter))
                         .successHandler(authenticateSuccessAdapter)
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                        })
                 );
 
         return http.build();
