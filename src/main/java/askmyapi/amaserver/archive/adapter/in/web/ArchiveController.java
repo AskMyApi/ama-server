@@ -1,16 +1,22 @@
 package askmyapi.amaserver.archive.adapter.in.web;
 
 import askmyapi.amaserver.archive.adapter.in.web.spec.ArchiveSpecs;
+import askmyapi.amaserver.archive.application.port.in.ReadArchiveIconAllUseCase;
 import askmyapi.amaserver.util.InfiniteScroll;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class ArchiveController implements ArchiveSpecs {
+
+    private final ReadArchiveIconAllUseCase readArchiveIconAllUseCase;
 
     @Override
     @PostMapping("/archives")
@@ -112,6 +118,13 @@ public class ArchiveController implements ArchiveSpecs {
     @Override
     @GetMapping("/archives/icons")
     public ResponseEntity<List<ReadIconResponse>> getIconAll() {
-        return null;
+        return ResponseEntity.ok(
+                readArchiveIconAllUseCase.readIconAll().stream()
+                .map(result -> new ReadIconResponse(
+                        result.iconCode(),
+                        result.iconUrl()
+                ))
+                .toList()
+        );
     }
 }
